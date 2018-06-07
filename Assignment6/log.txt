@@ -1,0 +1,73 @@
+NAME: Baolinh Nguyen
+UID: 104732121
+TA: Farnoosh Javadi
+CS35L Lab 6
+FILE: log.txt
+
+I first made sure that the PATH was correct using 
+export PATH=/usr/local/cs/bin$PATH
+I then made sure that I had an updated version of sort using the command
+sort --version
+sort (GNU coreutils) 8.28
+I see that I have version 8.28 which is the updated version. 
+I then create the file of 10 million random single-precision floating point
+numbers. 
+I use the following command to get the 10 million random single-precision
+floating point numbers:
+od -An -t fD -N
+I need to get 10 million floats, which would be 4 * 10 million bytes.
+So, I use the command
+od -An -t fF -N 40000000 < /dev/urandom | tr -s ' ' '\n' > random.txt
+the -An command got rid of all RADIX formatting, the -t command specified the
+type, which in this case what a float of size float, (fF), and the -N flag
+specified how many bytes we wanted. In this case, we wanted 40000000 bytes
+because we wanted 10000000 floating point numbers and each floating point is 4
+bytes. 
+The piping to tr -s ' ' '\n' served to remove all empty spaces and replace them
+with newlines since we want one number on each line. Moreover, the -s flag will
+guarantee that there is no extra whitespace or newlines. We see that we have an
+extra line when we run the command 
+wc -l
+10000001
+that was generated. We can remove this line easily by opening the random.txt
+file in emacs and using C-k.
+Now, when we use the command 
+wc -l 
+10000000
+We see that there are 10 million numbers.
+Once I've correctly formatted the file, I can now use that test data to time the
+sort -g command.
+I can do this with a variety of thread numers, 1, 2, 4, and 8. In order to make
+this easier, I write a script to do this.
+==========script.ssh=============
+#!/bin/bash                                                                     
+
+time -p sort -g --parallel=1 random.txt > /dev/null
+time -p sort -g --parallel=2 random.txt > /dev/null
+time -p sort -g --parallel=4 random.txt > /dev/null
+time -p sort -g --parallel=8 random.txt > /dev/null
+=================================
+I run this script and see the following results for each command:
+time -p sort -g --parallel=1 random.txt > /dev/null
+real 111.48
+user 110.54
+sys 0.93
+
+time -p sort -g --parallel=2 random.txt > /dev/null
+real 59.12
+user 112.04
+sys 0.55
+
+time -p sort -g --parallel=4 random.txt > /dev/null
+real 34.11
+user 113.40
+sys 0.45
+
+time -p sort -g --parallel=8 random.txt > /dev/null
+real 22.05
+user 116.07
+sys 0.89
+
+As seen above, the real time decreases as the number of threads increase from 1
+- 8.
+

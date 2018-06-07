@@ -1,0 +1,77 @@
+ASSIGNMENT 3
+NAME: Baolinh Nguyen
+TA: Farnoosh Javadi
+UID: 104732121
+CS35L Lab 6
+FILE: lab3.txt
+
+I first installed the coreutils-7.6.tar.gz file from the Assignment 3 site. I
+then moved that file into a temporary directory I called coreutils in my working
+directory. Once there, I unzipped the tar file by using the command
+tar -xvf coreutils-7.6.tar.gz
+When that was completed, I moved on to installing the coreutils 7.6 file by
+looking at the INSTALL file in the coreutils-7.6 directory to see how to install
+the file.
+After reading the INSTALL file, I noted that in order to install the coreutils
+files into the proper directory, I would have to use the flag --prefix=PREFIX in
+the configure command. In order to ensure that the coreutils files were being
+installed into my temporary directory, I used the command
+./compile --prefix=/u/cs/ugrad/baolinh/Desktop/CS35L/Assignment3/coreutils
+coreutils being the temporary directory I would put these files in.
+This allows me to edit the coreutils-7.9 files because I would have write permissions.
+Once that was complete, I used the commands
+make
+make install
+to finish the installation of the file.
+I checked that the bug appeared by using the commands
+  ls -l /bin/bash
+  ./ls -l /bin/bash
+that gave me the following format of output:
+For ls -l:
+   -rwxr-xr-x 1 root root 960632 Aug  3 06:36 /bin/bash
+For ./ls -l: (the ls command from the coreutils 7.6 file)
+    -rwxr-xr-x 1 root root 960632 2017-08-03 06:36 /bin/bash
+Our goal is to get the ./ls -l command to output the information in the
+following format:
+    -rwxr-xr-x 1 root root 729040 Mar  2  2009 /bin/bash
+which is the traditional Linux format.
+To fix the error, I can patch the ls program directly, using the workaround
+patch provided on the Assignment 3 site from Padraig Brady.
+After looking at the patch, I see the edits that need to be made.
+To make the patch, I can edit the ls.c file directly from the src directory.
+I open the ls.c file in emacs and make the proper changes.
+Once I've made the changes, I can go and recompile it by using the command:
+make
+which creates a new ls executable file based on the output:
+  CC     ls.o
+  CCLD   dir
+  CCLD   vdir
+  CCLD   ls
+Once I've completed that, I go back and look at the command ./ls -l again.
+I execute the command
+  ./ls -l /bin/bash 
+and get the following output:
+  -rwxr-xr-x 1 root root 960632 Aug  3 06:36 /bin/bash
+It doesn't look like it fixes the patch but if we use the command
+   ./ls -l
+on the entire src directory, we can see that it indeed patches the bug,
+especially if we look at older files:
+   -rw-r--r-- 1 baolinh csugrad   2458 Sep  1  2009 yes.c
+The older files will show the year while the newer files (or the files created
+within this last year) will show the time created instead of the year.
+I can test the patch formally by using the touch command as suggested on the
+Assignment 3 page.
+I use the following commands:
+touch -t 9907151230 oldFile
+touch new
+to create two files, one created on 1999-07-17 at 12:30 and another created
+right now.
+I use the modified ls command on the files using the commands:
+./ls -l old
+./ls -l new
+
+and get the following output:
+-rw-r--r-- 1 baolinh csugrad 0 Jul 15  1999 oldFile
+-rw-r--r-- 1 baolinh csugrad 0 Oct 12 11:48 newFile
+
+The patch fixes the bug and we are done!

@@ -1,0 +1,158 @@
+NAME: Baolinh Nguyen
+TA: Farnoosh Javadi
+UID: 104732121
+CS35L Lab 6
+File: sfrob.txt
+
+1. Comparing number of comparisons as a function of input lines.
+I created file with varying number of input lines in increments of powers of 10
+from 10 - 100000. Each line is populated by the following string:
+*~BO *{_CIA *hXE]D *LER #@_GZY #E\\OX #^BO #FKPS #NEM\4'
+The following was what I observed:
+Lines     Comparisons
+10        40
+100	  6555
+1000	  89814
+10000	  1150603
+100000	  14022962
+
+The equation obtained from performing a linear regression is the following: y =
+140.798x - 74829.267 with standard error on the slope being 1.388 where x is the
+number of lines and y is the number of comparisons done.
+2. Performance Analysis
+I did a performance analysis of each sfrob, sfrobu, sfrobs, sfrobu -f, and
+sfrobs -f with the different file sizes I had.
+Number of Lines:10
+time ./sfrob
+real 0m0.008s
+user 0m0.000s
+sys  0m0.008s
+
+time ./sfrobu
+real 0m0.002s
+user 0m0.001s
+sys  0m0.001s
+
+time ./sfrobs
+real 0m0.007s
+user 0m0.002s
+sys  0m0.005s
+
+time ./sfrobu -f
+real 0m0.002s
+user 0m0.000s
+sys  0m0.002s
+
+time ./sfrobs -f
+real 0m0.002s
+user 0m0.001s
+sys  0m0.000s
+
+Number of Lines:100
+time ./sfrob
+real 0m0.003s
+user 0m0.001s
+sys  0m0.001s
+
+time ./sfrobu
+real 0m0.006s
+user 0m0.000s
+sys  0m0.005s
+
+time ./sfrobs
+real 0m0.006s
+user 0m0.006s
+sys  0m0.000s
+
+time ./sfrobu -f
+real 0m0.007s
+user 0m0.000s
+sys  0m0.006s
+
+time ./sfrobs -f
+real 0m0.005s
+user 0m0.002s
+sys  0m0.004s
+
+Number of Lines:1000
+time ./sfrob
+real 0m0.013s
+user 0m0.009s
+sys  0m0.003s
+
+time ./sfrobu
+real 0m0.049s
+user 0m0.008s
+sys  0m0.040s
+
+time ./sfrobs
+real 0m0.009s
+user 0m0.004s
+sys  0m0.005s
+
+time ./sfrobu -f
+real 0m0.311s
+user 0m0.003s
+sys  0m0.306s
+
+time ./sfrobs -f
+real 0m0.025s
+user 0m0.005s
+sys  0m0.023s
+
+Number of Lines:10000
+time ./sfrob
+real 0m0.128s
+user 0m0.109s
+sys  0m0.015s
+
+time ./sfrobu
+real 0m0.480s
+user 0m0.068s
+sys  0m0.407s
+
+time ./sfrobs
+real 0m0.044s
+user 0m0.023s
+sys  0m0.019s
+
+time ./sfrobu -f
+real 0m0.439s
+user 0m0.030s
+sys  0m0.403s
+
+time ./sfrobs -f
+real 0m0.053s
+user 0m0.038s
+sys  0m0.018s
+
+Number of Lines:100000
+time ./sfrob
+real 0m1.498s
+user 0m1.070s
+sys  0m0.159s
+
+time ./sfrobu
+real 0m4.453s
+user 0m0.678s
+sys  0m3.722s
+
+time ./sfrobs
+real 0m1.171s
+user 0m0.263s
+sys  0m0.128s
+
+time ./sfrobu -f
+real 0m4.210s
+user 0m0.334s
+sys  0m3.832s
+
+time ./sfrobs -f
+real 0m1.091s
+user 0m0.435s
+sys  0m0.135s
+
+When we look at the numbers that were generated, we see that sfrobs is fast for
+all cases and that sfrobu is slow for all cases.
+Moreover, the sys time for all sfrobu commands are very high since we are using
+a lot of system calls.

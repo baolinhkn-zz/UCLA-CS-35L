@@ -1,0 +1,397 @@
+Baolinh Nguyen
+TA: Farnoosh Javadi
+UID: 104732121
+CS 35L Lab 6
+FILE: ans1.txt
+
+1. You can use the man -k [keyword] command to print out all commands with a
+specific word in their man page. This was found using the man man command and
+searching for a command that matches the criteria.
+
+2. The cp program is located: /usr/share/man/man1/cp.1.gz
+The wc program is located: /usr/share/man/man1/wc.1.gz
+I found the locations for these programs by using the man -k [name] command 
+that prints the location of the programs. I found this command using the man man
+command.
+
+3. Bash programs have names that are one character long. Some examples include
+".", ":", "[", and "w".
+The "." command is used to execute commands from a file in the current shell. It
+returns the status of the last command executed.
+The ":" command is a null command and always returns a successful exit status.
+The "[" command is used to evaluate conditional expressions.
+The "w" command is used to see who is logged on and what they are doing.
+These commands were found using the "help" command and the "find /usr/bin -name
+"?"" command, which allowed me to look for commands that only contained one
+character. More details about each of the single character commands were found
+by typing "help ." and "help :".
+ 
+4. To see what file is actually executed when the command /usr/bin/emacs is
+executed, I "cd /usr/bin" and do "ls -l emacs" to view the where the symbolic
+link points. I see that it actually executes the "/etc/alternatives/emacs" file.
+
+5. To find out more about the chmod command, I used the "man chmod" command to
+look at the permissions. The "g+s" mode will change the permissions of the file
+so that the other users in the file's group will be added to the file will be
+able to change the user or group ID on execution. The "o-x" mode will change the
+permissions of the file so that the other users not in the file's group will be 
+unable to execute the file.
+
+6. To find out which options for the "find" command will let me search for files
+modified in the last three weeks, I used the "man find" command. To find files
+modified in the last three weeks, I use the command "find -ctime -21" where 21
+is the amount of days in three weeks. The command will find files that were
+changd in the last 21 * 24 hours ago, which is three weeks ago.
+
+7. To find all directories modified in the last three weeks, I use the command
+"find / type d -ctime -21" that will find all directories from the root
+directory modified within the last three weeks.
+
+8. I first found the location of the "find" command using the "which find"
+command. I then listed all of the symbolic links by using the command "find
+/usr/bin -type l" which will look for all files that are symbolic links.
+The following is the list of symbolic links:
+/usr/bin/xzegrep
+/usr/bin/htxelatex
+/usr/bin/mysql_config
+/usr/bin/gpgv
+/usr/bin/lpstat
+/usr/bin/pnmcomp
+/usr/bin/mac2unix
+/usr/bin/texconfig-dialog
+/usr/bin/latex
+/usr/bin/gnatgcc
+/usr/bin/dvired
+/usr/bin/jstack
+/usr/bin/pnmenlarge
+/usr/bin/wsgen
+/usr/bin/apropos
+/usr/bin/mk4ht
+/usr/bin/pstack
+/usr/bin/rmid
+/usr/bin/sgml2xml
+/usr/bin/nmtui-connect
+/usr/bin/htcontext
+/usr/bin/wish
+/usr/bin/kpsewhere
+/usr/bin/pgmedge
+/usr/bin/dot2gxl
+/usr/bin/jstat
+/usr/bin/bzless
+/usr/bin/jconsole
+/usr/bin/mailq.postfix
+/usr/bin/kpsetool
+/usr/bin/kpsepath
+/usr/bin/kdesu
+/usr/bin/pmiostat
+/usr/bin/gjs
+/usr/bin/xjc
+/usr/bin/osage
+/usr/bin/db2rtf
+/usr/bin/jps
+/usr/bin/pbmtoicon
+/usr/bin/sgmlnorm
+/usr/bin/flipdiff
+/usr/bin/sfdp
+/usr/bin/lualatex
+/usr/bin/setup
+/usr/bin/allneeded
+/usr/bin/twopi
+/usr/bin/ghc-pkg
+/usr/bin/newaliases.sendmail
+/usr/bin/pamon
+/usr/bin/ebb
+/usr/bin/geqn
+/usr/bin/makeinfo
+/usr/bin/xmltex
+/usr/bin/links
+/usr/bin/bmptoppm
+/usr/bin/javac
+/usr/bin/rmail
+/usr/bin/patchwork
+/usr/bin/ghci
+/usr/bin/httexi
+/usr/bin/fmtutil
+/usr/bin/texconfig
+/usr/bin/gimp
+/usr/bin/rmiregistry
+/usr/bin/jade
+/usr/bin/gtar
+/usr/bin/captoinfo
+/usr/bin/latrace-ctl
+/usr/bin/emacs
+/usr/bin/htmex
+/usr/bin/circo
+/usr/bin/jrunscript
+/usr/bin/pstree.x11
+/usr/bin/gnome-keyring
+/usr/bin/traceroute6
+/usr/bin/lastb
+/usr/bin/pax
+/usr/bin/ghc
+/usr/bin/ghostscript
+/usr/bin/readcd
+/usr/bin/tclsh
+/usr/bin/el4-rpmlint
+/usr/bin/i386
+/usr/bin/rmic
+/usr/bin/nmtui-hostname
+/usr/bin/policytool
+/usr/bin/flex++
+/usr/bin/newaliases.postfix
+/usr/bin/unpack200
+/usr/bin/lex
+/usr/bin/gpg
+/usr/bin/X
+/usr/bin/cdrecord
+/usr/bin/jdb
+/usr/bin/dvi2fax
+/usr/bin/jsadebugd
+/usr/bin/gmake
+/usr/bin/purgestat
+/usr/bin/texluac
+/usr/bin/ppmtojpeg
+/usr/bin/jcmd
+/usr/bin/runhaskell
+/usr/bin/view
+/usr/bin/native2ascii
+/usr/bin/bzcmp
+/usr/bin/unix2mac
+/usr/bin/tnameserv
+/usr/bin/httex
+/usr/bin/jar
+/usr/bin/orbd
+/usr/bin/servertool
+/usr/bin/jadetex
+/usr/bin/gsoelim
+/usr/bin/open
+/usr/bin/dvilualatex
+/usr/bin/bunzip2
+/usr/bin/mkluatexfontdb
+/usr/bin/idlj
+/usr/bin/systemd-loginctl
+/usr/bin/x86_64
+/usr/bin/reset
+/usr/bin/pmcollectl
+/usr/bin/updmap-sys
+/usr/bin/jhat
+/usr/bin/csh
+/usr/bin/pnmsplit
+/usr/bin/pngtopnm
+/usr/bin/pnmfile
+/usr/bin/updmap
+/usr/bin/serialver
+/usr/bin/gimp-console
+/usr/bin/pnmscale
+/usr/bin/jdeps
+/usr/bin/jstatd
+/usr/bin/gtbl
+/usr/bin/haddock
+/usr/bin/bzcat
+/usr/bin/byacc
+/usr/bin/lpq
+/usr/bin/pgmslice
+/usr/bin/texlua
+/usr/bin/ping6
+/usr/bin/dvipdfm
+/usr/bin/rvim
+/usr/bin/lsdiff
+/usr/bin/jmap
+/usr/bin/extcheck
+/usr/bin/ex
+/usr/bin/pnmarith
+/usr/bin/fdp
+/usr/bin/javah
+/usr/bin/pmatop
+/usr/bin/texhash
+/usr/bin/psfstriptable
+/usr/bin/sh
+/usr/bin/wsimport
+/usr/bin/paplay
+/usr/bin/grepdiff
+/usr/bin/gv2gxl
+/usr/bin/systemd-coredumpctl
+/usr/bin/rpmquery
+/usr/bin/python
+/usr/bin/parecord
+/usr/bin/desktop-file-edit
+/usr/bin/nmtui-edit
+/usr/bin/pgmoil
+/usr/bin/texconfig-sys
+/usr/bin/jjs
+/usr/bin/pnmdepth
+/usr/bin/rpmverify
+/usr/bin/appletviewer
+/usr/bin/thumbpdf
+/usr/bin/nisdomainname
+/usr/bin/extractbb
+/usr/bin/newaliases
+/usr/bin/vimdiff
+/usr/bin/pdfetex
+/usr/bin/runghc
+/usr/bin/texlinks
+/usr/bin/pgmnorm
+/usr/bin/xzcat
+/usr/bin/rnano
+/usr/bin/initex
+/usr/bin/psfaddtable
+/usr/bin/dnsdomainname
+/usr/bin/hsc2hs
+/usr/bin/hoststat
+/usr/bin/combinediff
+/usr/bin/f95
+/usr/bin/mailq
+/usr/bin/hwloc-ls
+/usr/bin/pdfjadetex
+/usr/bin/mkisofs
+/usr/bin/java
+/usr/bin/dvdrecord
+/usr/bin/pnmtotiff
+/usr/bin/pnmtopnm
+/usr/bin/pnmnoraw
+/usr/bin/javap
+/usr/bin/javaws
+/usr/bin/spent
+/usr/bin/etex
+/usr/bin/rview
+/usr/bin/arecord
+/usr/bin/ht
+/usr/bin/nfs4_editfacl
+/usr/bin/pdflatex
+/usr/bin/lprm
+/usr/bin/nail
+/usr/bin/phar
+/usr/bin/xzcmp
+/usr/bin/dviluatex
+/usr/bin/python2-config
+/usr/bin/python2
+/usr/bin/chsh
+/usr/bin/rhn_register
+/usr/bin/pnminterp
+/usr/bin/pmevent
+/usr/bin/subscription-manager
+/usr/bin/pnmtofits
+/usr/bin/ksh
+/usr/bin/nc
+/usr/bin/psfgettable
+/usr/bin/el5-rpmlint
+/usr/bin/lp
+/usr/bin/domainname
+/usr/bin/zsoelim
+/usr/bin/kpsexpand
+/usr/bin/jinfo
+/usr/bin/sg
+/usr/bin/makemap
+/usr/bin/pack200
+/usr/bin/icontopbm
+/usr/bin/infotocap
+/usr/bin/slogin
+/usr/bin/parec
+/usr/bin/iptables-xml
+/usr/bin/ppmnorm
+/usr/bin/atq
+/usr/bin/gtroff
+/usr/bin/spam
+/usr/bin/mailq.sendmail
+/usr/bin/neato
+/usr/bin/gemtopbm
+/usr/bin/gneqn
+/usr/bin/keytool
+/usr/bin/cc
+/usr/bin/setup-nsssysinit
+/usr/bin/gnroff
+/usr/bin/linux64
+/usr/bin/javadoc
+/usr/bin/ypdomainname
+/usr/bin/ld
+/usr/bin/ppmquantall
+/usr/bin/nsgmls
+/usr/bin/mock
+/usr/bin/db2pdf
+/usr/bin/bashbug
+/usr/bin/schemagen
+/usr/bin/atrm
+/usr/bin/pnmcut
+/usr/bin/rvi
+/usr/bin/Mail
+/usr/bin/fmtutil-sys
+/usr/bin/htxetex
+/usr/bin/runhaskell-ghc
+/usr/bin/libpng-config
+/usr/bin/linux32
+/usr/bin/db2ps
+/usr/bin/gpic
+/usr/bin/mptopdf
+/usr/bin/simpdftex
+/usr/bin/gxl2dot
+/usr/bin/allec
+/usr/bin/passwd
+/usr/bin/unxz
+/usr/bin/db2dvi
+/usr/bin/xzfgrep
+/usr/bin/mktexfmt
+/usr/bin/jarsigner
+/usr/bin/mail
+/usr/bin/ppmtouil
+/usr/bin/mkhybrid
+/usr/bin/allcm
+/usr/bin/pdfxmltex
+/usr/bin/rksh
+/usr/bin/awk
+/usr/bin/htlatex
+/usr/bin/lpr
+/usr/bin/python-config
+/usr/bin/inimf
+/usr/bin/cancel
+/usr/bin/etags  
+
+There are a total of 293 symbolic links.
+
+9. To find the oldest regular file in the "/usr/lib" directory, I first navigate
+there and use the command: "ls -lt". The file at the bottom should be the oldest
+file:
+-rwxr-xr-x   1 root root   18692 Jan 26  2014 libgpg-error.so.0.10.0
+
+10. I used the "man locale" command to find out more about the "locale"
+command. I read that the "locale" command displays information about the current
+locale. Then, to find out where the the "locale" command gets its information
+from, I used the "man -k locale" command. I saw that that "localedef" is where
+all of the locale definition files 
+are compiled.
+
+11. To find the emacs commands that contain the word "sort”, I used the command
+"C-h a sort". This showed that the following commands have "sort" in their name:
+- Buffer-menu-sort
+- sort-columns
+- sort-fields
+- sort-lines
+- sort-numeric-fields
+- sort-pages
+- sort-paragraphs
+- sort-regexp-fields
+- tabulated-list-col-sort
+- tabulated-list-sort
+
+12. I examined the commands C-M-a through C-M-h by using the command
+C-h b 
+to list the possible commands and scrolled down to see commands C-M-a through
+C-M-h. 
+C-M-a - Move backward to the beginning of a defun
+C-M-b - Move backward across one balanced expression
+C-M-c - Exit the innermost recursive edit or minibuffer
+C-M-d - Move forward down one level of parentheses
+C-M-e - Move forward to the next end of defun 
+C-M-f - Move forward across one balanced expression
+C-M-g - Does not exist
+C-M-h - Put a mark at the end of this defun, point at beginning
+
+13. I used C-h k C-g to find out what C-g does. C-g runs the command
+keyboard-quit that will quit whatever program is running.
+
+14. The Emacs "yank" function will past previously "killed" text. It is
+associated with the C-y command. I looked this up using the "C-h f yank"
+command.
+
+15. The only differences I noticed when I invoked the C-x d command in emacs is
+that it also displays the root and working directory in the list while the ls -l
+command omits these two directories.

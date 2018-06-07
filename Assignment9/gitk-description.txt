@@ -1,0 +1,21 @@
+NAME: Baolinh Nguyen
+UID: 104732121
+TA: Farnoosh Javadi
+CS35L Lab 6
+FILE: gitk-description.txt
+
+This is a description of the screenshot that I obtained from gitk.
+TOP HALF: From left to right, the three windows are as follows:
+a. This is a visual representation of the commit history, indicating which
+   branch is the master, the HEAD, the remote branch, and merged branches. IT
+   also cotains information regarding the commit message.
+   Directly below this is the commit SHA ID of the commit that is currently selected.
+b. The second window notes who the commit author for the corresponding commit on
+   the same line.
+c. The final box show the time of the commit.
+BOTTOM HALF: From left to right, the two windows are as follows: 
+a. The left half shows the ChangeLog entry. 
+   Below this ChangeLog entry is a description of the file changes in a diff
+   format.
+b. The right half, headed by "Comments:" shows the files themsleves that have
+   been changed.

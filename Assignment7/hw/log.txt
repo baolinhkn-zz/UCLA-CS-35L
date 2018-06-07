@@ -1,0 +1,50 @@
+NAME: Baolinh Nguyen
+UID: 104732121
+TA: Farnoosh Javadi
+CS35L Lab 6
+FILE: log.txt
+
+My partner for this lab was Kubilay Agi.
+I first logged into my BeagleBone using the command
+sudo ssh root@192.168.7.2
+I then enabled ssh by installing OpenSSH with the following commands:
+sudo apt-get install openssh-server
+sudo apt-get install openssh-client
+I generated a public and private key using the command:
+ssh-keygen
+The password was saved in /root/.ssh, the default location.
+The password I chose was cs35l.
+I created a user for Kubilay using the command:
+sudo useradd -d /home/kubilay -m kubilay
+I then added a password for kubilay using the command:
+sudo passwd kubilay
+He then entered his password: kubilay.
+I then created a .ssh directory for kubilay using the commands:
+cd /home/kubilay
+sudo mkdir .ssh
+sudo chown -R kubilay .shh
+sudo chmod 700 .ssh
+After I finished setting up the server, I began to set up the client so that I
+could access Kubilay's server.
+I type in the following command: 
+ssh-copy-id -i baolinh@172.30.36.138
+so that I can add my public key to the ssh folder in Kubilay's server.
+However, we had some issues so we chose to connect to a different network
+CR3760-wifi
+and generated new IP addresses:
+My IP Address: 10.97.85.252
+Kubilay's IP Address: 10.97.85.253
+Kubilay also had to redo the set-up of my user account so now, my username on
+his server is b and thus, I type in the corresponding command:
+ssh-copy-id -i b@10.97.85.253
+I then use the command 
+ssh-add
+to add the private key
+I then use 
+ssh b@172.30.36.138
+to enter the server 
+I use the command
+touch hi_kubilay.txt
+to test whether or not I can create a file on Kubilay's server and he can see
+it.
+It works!

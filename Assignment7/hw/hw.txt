@@ -1,0 +1,25 @@
+NAME: Baolinh Nguyen
+UID: 104 732 121
+TA: Farnoosh Javadi
+CS35L Lab 6
+FILE: hw.txt
+
+1. If the other teams had been observing the bytes going across the network, it
+still would have been secure because the bytes are encrypted. The messages sent
+between the client and a server are encrypted at the sender level with the
+symmetric encryption key and the recevier decrypts these messages with the same
+session key. Thus, even though other teams may have been observing all the
+bytes, they would have been encrypted with the session key.
+       (1) If the person observing the keystrokes had been observing throughout
+       the entire time, meaning when the files that are in question were creted,
+       they would obviously know the content of the files. If they observed
+       during the time when I was logging into the server, they would know my
+       username and password and would be able to log into the server under my
+       name.
+       (2) If the person in question had access to the USB that I wsa booting
+       off of, they would have access to the private key that I have saved in
+       the system, rendering it useless.
+2. gpg --verify simply verifies the signature of the document with the public
+key. It has no information on the creator or the origin of the file. It does not
+prove origin. Instead, we can rely on a third party such as a Certificate
+Authority to ensure that the file in question is geniune.

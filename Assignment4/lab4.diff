@@ -1,0 +1,19 @@
+2017-10-25  Baolinh Kianna Nguyen  <baolinh@lnxsrv09.seas.ucla.edu>
+
+
+	* lib/timespec.h (timespec_cmp):
+	Instead of subtraction, switch to direct comparison to avoid
+	underflow that could occur with subtraction.
+
+--- lib/timespec.h	2017-10-25 16:39:33.577562000 -0700
++++ lib/timespec.h	2017-10-25 16:40:12.784030000 -0700
+@@ -45,8 +45,7 @@
+ static inline int
+ timespec_cmp (struct timespec a, struct timespec b)
+ {
+-     int diff = a.tv_sec - b.tv_sec;                                                                                        
+-     return diff ? diff : a.tv_nsec - b.tv_nsec; 
++  return (a.tv_sec < b.tv_sec) ? -1 : (a.tv_sec > b.tv_sec) ? 1 : 0;
+ }
+ 
+ # if ! HAVE_DECL_NANOSLEEP

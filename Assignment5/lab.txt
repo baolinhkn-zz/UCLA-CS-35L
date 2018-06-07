@@ -1,0 +1,84 @@
+Name: Baolinh Nguyen
+UID: 10472121
+TA: Farnoosh Javadi
+CS35L LAb 6
+File: lab.txt
+
+I first began by writing the tr2b.c file that would read from STDIN and STDOUT
+using getchar() and putchar(). I checked for three different errors:
+- not enough arguments
+- arguments are not of the same length
+- from argument has duplicate bytes
+I then was able to use putchar() and getchar() to translate all characters in
+the from argument to the corresponding character found in the to argument.
+
+After that was complete, I translated that file to a version that used read()
+and write() rather than getchar() and putchar(). Everything up until the
+translation itself was the same so I copied the code from tr2b.c to tr2u.c up
+until that point. After that, I had to do some research on the read() and
+write() commands.
+I created a buffer
+char curr[1]
+that would be used to get input from read(). I then replaced all correponding
+getchar() with read() and replaced all putchar() with write(). I had some issues
+at first with some of the arguments of write() and had to remember that write
+takes in a pointer to characters to write from so I fixed that problem and was
+able to successfully complete the tr2u.c program.
+I then created a file to test the files with using the following command:
+head --bytes=5000000 /dev/urandom > output.txt
+After, I used strace to compare system calls between tr2u.c and tr2b.c for
+a. copying a file to another
+b. copying a file to terminal.
+Once I've created strace files strace0-3, I can then use wc -l on these files to
+see approximately how many systems calls are made for each file. 
+a. copying a file to another
+strace -o strace0 ./tr2b abc def <output.txt >bufferCopy.txt
+I see that approximately 1252 system calls are used here.
+
+strace -o strace1 ./tr2u abc def <output.txt >unBufferedCopy.txt
+I see that approximately 10000026 system calls are made. This is significantly
+more than strace0, which is the version that uses the getchar() and putchar()
+functions. In the tr2u.c version, during every iteration, read() and write() are
+used twice. However, in the tr2b.c version, getchar() and putchar() are made so
+that they do not use system calls as often.
+
+b. copying a file to terminal
+strace -o strace3 2/tr2b abc def <output.txt
+I see that approximately 20408 sysem calls are made. Thiss i than the
+amount made when one file is copied to another
+
+strace -o strace3 ./tr2u abc def <output.txt
+I see that 10000026 system calls are made here re when copying  a file to the
+terminal.
+
+OveraOverthe number of system calls made when copying files to other file is
+less than copying to terminal because printinginting t the screen would require
+more system calls.
+
+We can now test the efficiency of the program for the same situations as above
+using the following commands.
+a. copying file to another file
+time ./tr2b abc def <output.txt >bufferCopy.txt
+real 0m0.280s
+user 0m0.190s
+sys  0m0.006s
+
+time ./tr2u abc def <output.txt >unBufferedCopy.txt
+real 0m6.011s
+user 0m0.285s
+sys  0m5.680s
+
+time ./tr2b abc def <output.txt
+real 0m1.432s
+user 0m0.214s
+sys  0m0.083s
+
+time ./tr2u abc def <output.txt
+real 0m5.002s
+user 0m0.284s
+sys  0m4.684s
+
+Looking at all the time data we have accumulated, we can see that it is more
+efficient to use tr2b.c, which uses putcgetchar() and putchar(). Again, it is
+also more time time efficient to copy from a file to another file rather than to
+output to the buffer. This is because of the higer number of system calls required.

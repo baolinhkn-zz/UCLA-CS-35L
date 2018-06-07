@@ -1,0 +1,73 @@
+NAME: Baolinh Nguyen
+UID: 104732121
+TA: Farnoosh Javadi
+CS35L Lab 6
+FILE: hw9.txt
+
+2. I first made a new branch called "quote":
+   git checkout v3.0 -b quote
+3. I installed the change into the branch with the patch command:
+   patch -p1 < quote-3.0-patch.txt
+   patching file src/cmp.c
+   patching file src/diff.c
+   patching file src/diff3.c
+   patching file src/dir.c
+   patching file src/sdiff.c
+   patching file src/util.c
+
+   The patching is successful.
+4. I now look into adding a ChangeLog entry with the emacs command C-x 4 a.
+5. To compose a ChangeLog entry, I opened emacs and typed in the command C-x 4 a.
+   I simply copied and pasted the appropriate entry from git-log.txt and used
+   that as my ChangeLog entry. 
+6. I can now commit my changes to the new branch and use the ChangeLog entry as
+   my commit message with the following:
+   git add .
+   git commit -aF ChangeLog
+
+   Committer: Baolinh Kianna Nguyen <baolinh@lnxsrv09.seas.ucla.edu>
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly:
+
+    git config --global user.name "Your Name"
+    git config --global user.email you@example.com
+
+After doing this, you may fix the identity used for this commit with:
+
+    git commit --amend --reset-author
+
+ 9 files changed, 1439 insertions(+), 43 deletions(-)
+ create mode 100644 diffutils-gets.diff
+ create mode 100644 lib/stdio.in.h.orig
+ create mode 100644 quote-3.0-patch.txt
+7. I can now generate a patch file using the command:
+   git format-patch -1 --stdout > formatted-patch.txt
+8. My partner for this part is Kubilay Agi.
+   I first added his file in by having him use scp to copy his patch into my
+   server. I then renamed his patch kubilay-patch.txt.
+   I then made a new branch:
+   git checkout -b 'partner' 'v3.0'
+   I then applied kubilay's patch
+   git am < kubilay-patch.txt
+   Applying: 2017-12-01 Kubilay Yucel Agi <kubilay@lnxsrv09.seas.ucla.edu>
+
+   And now, I can check if it works.
+   ./bootstrap
+   patch -p0 < diffutils-gets.diff
+   ./configure
+   make
+   I then ran 
+   diff . -
+   diff --help
+   and I also ran 
+   make check
+   and it appears to work.   
+9. I can now verify if my ChangeLog entry works by running the command
+   make distdir
+   After running, I see that a directory called diffutils-3.0.1-34b2 is created.
+   I can see the ChangeLog in there and see that the first entry is my entry.
+10. I ran 
+    cd ~eggert/src/gnu/emacs
+    gitk
+    and saw the window in xQuartz. The files are attached.

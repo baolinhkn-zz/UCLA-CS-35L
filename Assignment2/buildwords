@@ -1,0 +1,42 @@
+#!/bin/bash
+
+#retrieve only lines with <td>.*</td>
+grep '<td>.*</td>' | \
+
+#remove the leading white space
+sed 's/^\s*//g' | \
+
+#remove all extra html tags
+sed 's/<[^>]*>//g' | \
+
+#remove blank lines
+sed '/^$/d' | \
+
+#remove English words
+sed -n '1~2!p' | \
+
+#switches all uppercase to lowercase
+tr [A-Z] [a-z] | \
+
+#switch all ` to '
+tr '`' "'" | \
+
+#separate words that contain a comma and a space into two words
+sed 's/, /\n/g' | \
+sed 's/ /\n/g' | \
+
+#remove all words that contain letters not in the Hawaiian alphabet
+sed "/[^pk'mnwlhaeiou]/d" | \
+
+#sort all words and remove duplicates
+sort -u | \
+
+#removes final spaces
+sed '/^$/d'
+
+#ASSIGNMENT 2
+#NAME: Baolinh Nguyen
+#TA: Farnoosh Javadi
+#UID: 104732121
+#CS35L Lab 6
+#FILE: buildwords

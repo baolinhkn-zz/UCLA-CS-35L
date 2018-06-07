@@ -1,0 +1,56 @@
+ASSIGNMENT 3
+NAME: Baolinh Nguyen
+TA: Farnoosh Javadi
+UID: 104732121
+CS35L Lab 6
+FILE: hw3.txt
+
+1. If we go to the part of the ls.c code that includes the line: 
+   case_long_iso_time_style:
+   we can see that it is a switch statement. That line was useless because the
+   previous line:
+   case long_iso_time_style:
+   repeats the same case and thus, Brady's patch removed the other line in order
+   to prevent redundant code from being used.
+2. If a company were to adopy this patched version of Coreutils which will
+   output the following format:
+   -rw-r--r-- 1 baolinh csugrad   2458 Sep  1  2009 yes.c
+   Instead of this format: 
+   -rwxr-xr-x 1 root root 729040 2009-03-02 06:22 /bin/bash
+   It may run into probems regarding parsing, especially when parsing date and
+   time since there would be different modes for different aspects of the date
+   (such as month, date, and year). Moreover, this might be an issue for
+   non-English speakers as the months are in English, which biases the program
+   against those who do not know English. The version that was used before the
+   patch uses strictly numbers for indicating the date and time, which is more
+   universal than the format that the patch introduced.
+
+3. When the randline.py script is run on an empty file like /dev/null, the
+   following output appears:
+   Traceback (most recent call last):
+  File "randline.py", line 70, in <module>
+    main()
+  File "randline.py", line 64, in main
+    sys.stdout.write(generator.chooseline())
+  File "randline.py", line 34, in chooseline
+    return random.choice(self.lines)
+  File "/usr/lib64/python2.7/random.py", line 274, in choice
+    return seq[int(self.random() * len(seq))]  # raises IndexError if seq is
+   empty
+   There was an error because there was an empty file. The return
+   seq[int(self.rando() * len(seq))] line will raise something called an
+   IndexError is seq is empty. If I check the last exit status with the command
+   echo $?
+   It shows that it returns a 1, indicating error.
+4. If I try to run the file using Python 3 with the command:
+   python3 randline.py testFile.txt
+   I receive a syntax error:
+   File "randline.py", line 65
+    except IOError as (errno, strerror): 
+   There is an error because in Python 2, errors were previously
+   iterable. However, as the standard changed in Python 3, there is no way t
+   iterate over errors so the syntax for that line must be changed to the
+   following:
+   except IOError as e:
+   	  errno, sterror = e.args
+   which will resolve the syntax error.

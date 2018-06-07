@@ -1,0 +1,186 @@
+ASSIGNMENT 4
+NAME: Baolinh Nguyen
+TA: Farnoosh Javadi
+UID: 104732121
+CS35L Laba 6
+FILE: lab4.txt
+
+I first installed the coreutils-with-bug.tar.gz file and added it to my Linux
+server in the following directory
+/u/cs/ugrad/baolinh/Desktop/CS35L/Assignment4/Lab/coreutils
+There, I unzipped it using the following command
+tar -xvf coreutils-with-bug.tar.gz
+I accessed the INSTALL file in the src directory and read about how to install
+the coreutils-with-bug files.
+I went to the coreutils-with-bug directory that was created where I could see
+the src directory and executed the following commands:
+./configure --prefix=/u/cs/ugrad/baolinh/Desktop/CS35L/Assignment4/Lab/coreutils
+to make sure that the installation of the package's files are in the temporary
+directory I've created.
+I then executed the following commands to compile and install the package:
+make
+make install
+However, when I ran the "make install" command, I see that there is an error:
+
+Making install in lib
+make[1]: Entering directory
+`/w/home.13/cs/ugrad/baolinh/Desktop/CS35L/Assignment4/Lab/coreutils/coreutils-with-bug/lib'
+make  install-am
+make[2]: Entering directory
+`/w/home.13/cs/ugrad/baolinh/Desktop/CS35L/Assignment4/Lab/coreutils/coreutils-with-bug/lib'
+if gcc -DHAVE_CONFIG_H
+-DLIBDIR=\"/u/cs/ugrad/baolinh/Desktop/CS35L/Assignment4/Lab/coreutils//lib\"
+-I. -I. -I..  -I.. -I.   -g -O2 -MT utimecmp.o -MD -MP -MF ".deps/utimecmp.Tpo"
+-c -o utimecmp.o utimecmp.c; \
+then mv -f ".deps/utimecmp.Tpo" ".deps/utimecmp.Po"; else rm -f
+".deps/utimecmp.Tpo"; exit 1; fi
+In file included from utimecmp.c:41:0:
+utimens.h:2:5: error: conflicting types for 'futimens'
+ int futimens (int, char const *, struct timespec const [2]);
+     ^
+In file included from utimecmp.h:25:0,
+                 from utimecmp.c:25:
+/usr/include/sys/stat.h:373:12: note: previous declaration of 'futimens' was
+here
+ extern int futimens (int __fd, const struct timespec __times[2]) __THROW;
+            ^
+make[2]: *** [utimecmp.o] Error 1
+make[2]: Leaving directory
+`/w/home.13/cs/ugrad/baolinh/Desktop/CS35L/Assignment4/Lab/coreutils/coreutils-with-bug/lib'
+make[1]: *** [install] Error 2
+make[1]: Leaving directory `/w/home.13/cs/ugrad/baolinh/Desktop/CS35L/Assignment4/Lab/coreutils/coreutils-with-bug/lib'
+
+The above output tells me that there are two functions both named futimens that
+are essentially the same buth yet, they have different parameters. In order to
+fix this, I get the patch from the assignment page using the following command:
+wget http://web.cs.ucla.edu/classes/fall17/cs35L/assign/coreutils.diff
+Once I get the diff file, I can apply the patch to the existing files by using
+the patch command.
+patch -p0 <coreutils.diff
+I get the following output:
+patching file lib/utimens.c
+patching file lib/utimens.h
+patching file src/copy.c
+patching file src/tee.c
+patching file src/touch.c
+This shows that I have successfully installed the patch and now can continue
+with make clean and then with the make install command. Now, there are no issues
+installing the program because the patch has fixed all files with duplicate
+function names.
+I can now look at the next error. I did that by creating the following script:
+==============
+OutputBug.ssh
+==============
+#!/bin/bash                                                                                                               
+
+tmp=$(mktemp -d)
+cd $tmp
+touch -d '1918-11-11 11:00 GMT' wwi-armistice
+touch now
+sleep 1
+touch now1
+TZ=UTC0 ~/Desktop/CS35L/Assignment4/Lab/coreutils/coreutils-with-bug/src/ls -lt 
+	--full-time wwi-armistice now now1
+cd ..
+rm -rf $tmp
+
+==============
+To run this script, I had to modify permissions on the file using
+chmod u+x outputBug.ssh
+Upon running the script using the command:
+./outputBug.ssh
+I get the following incorrect output:
+-rw-r--r-- 1 baolinh csugrad 0 1918-11-11 11:00:00.000000000 +0000 wwi-armistice
+-rw-r--r-- 1 baolinh csugrad 0 2017-10-24 17:45:38.528286959 +0000 now1
+-rw-r--r-- 1 baolinh csugrad 0 2017-10-24 17:45:37.526270489 +0000 now
+The correct way this should be outputted is wwi-armistice should be the last
+entry, not the first. 
+I can do this by debugging the ls file in using the following commands that
+replace the last two lines of my script.
+cd
+gdb Desktop/CS35L/Assignment4/Lab/coreutils/coreutils-with-bug/src/ls
+There, I can look at the functions inside ls.c by using the command:
+info functions
+The function I see that is of interest is 
+static void sort_files(void);
+I set a breakpoint there by using the command:
+(gdb) break sort_files
+Breakpoint 1 at 0x4040d0: file ls.c, line 2954.
+I then run the debugger by using the command:
+(gdb) run -lt wwi-armistice now now1
+The debugger stops the program at sort_files()
+Starting program:
+/u/cs/ugrad/baolinh/Desktop/CS35L/Assignment4/Lab/coreutils1/coreutils-with-bug/src/ls
+-lt wwi-armistice now now1
+
+Breakpoint 1, sort_files () at ls.c:2954
+
+I then can step through the program using the command:
+(gdb) s
+As I step through, I see that the functions enters a switch statement that
+decides how to sort the file. 
+2975	          func = sort_reverse ? rev_cmp_mtime : compare_mtime;
+I see that the function we are concerned with is compare_mtime, so we can set a
+breakpoint at that function.
+I start the debugging process over again and this time set a breakpoint at the
+compare_mtime function.
+(gdb) break compare_mtime
+Breakpoint 1 at 0x406483: compare_mtime. (2 locations)
+When I run it again, I see that it stops at this function: 
+2884 static int compare_mtime (V a, V b) { return cmp_mtime (a, b, xstrcoll); }
+So I can begin this process again by setting a breakpoint at the next function:
+cmp_mtime
+(gdb) break cmp_mtime
+I see that the cmp_mtime function contains the following code int he fie timespec.h.
+48      int diff = a.tv_sec - b.tv_sec;
+49	return diff ? diff : a.tv_nsec - b.tv_nsec;
+The issue that is occuring is due to underflow in the subtraction. Given dates
+far apart enough, the result will be so negative and the result will underflow
+and result in a diff that is larger than it should be and thus, this causes the
+system to think that wwi-armistice is an event that occurs in the "future." We
+can fix this issue by working around the subtraction and using the following
+instead. I reason that the diff is used to determine order. Moreover, instead of
+calculating the exact difference between the two times, I can just return an
+indicator that tells the program whether the a is before b or b is before a or
+they occurred at the same time. Thus, I can replace lines 48 and 49 with simply
+return (a.tv_sec < b.tv_sec) ? -1 : (a.tv_sec > b.tv_sec ? 1 : 0);
+I can go back to the timespec.h file, create a copy in my working directory
+using the function, and then modify it using emacs to add that line.
+Once I've done that, I can create the diff file by using the following command.
+diff -u coreutils/coreutils-with-bug/lib/timespec.h timespec.h >patch.diff
+I can then create the ChangeLog using C-x 4 a.
+I then can append this to the diff file using the following:
+cp ChangeLog lab4.diff
+cat patch.diff >> lab4.diff
+Once I've completed that, I have the lab4.diff file that I need.
+To make the patch, I move the lab4.diff file into the coreutils-with-bug
+directory and change 
+"coreutils/coreutils-with-bug/lib/timespec.h" to "lib/timespec.h" and 
+"timespec.h" to "lib/timespec.h"
+I can use this to patch the coreutils I have by using
+patch -p0 <lab4.diff
+patching file lib/timespec.h
+Now, I can recompile using
+make
+Once that is complete, I can retest the ls -lt command again by using the same
+script as before: ./outputBug.ssh
+I can see that the output is now:
+-rw-r--r-- 1 baolinh csugrad 0 2017-10-25 16:42:42.101732812 -0700 now1
+-rw-r--r-- 1 baolinh csugrad 0 2017-10-25 16:42:41.099716281 -0700 now
+-rw-r--r-- 1 baolinh csugrad 0 1918-11-11 03:00:00.000000000 -0800 wwi-armistice
+So the bug has been fixed!
+Now, I can see how the SEASnet machine acts when a similar situation is given. 
+I return to the home directory first by using
+cd ~
+I use the following commands:
+touch -d '1918-11-11 11:00 GMT' wwi-armistice
+touch now
+sleep 1
+touch now1
+TZ=UTC0 ls -lt --full-time wwi-armistice now now1
+I receive the following output:
+-rw-r--r-- 1 baolinh csugrad 0 2054-12-17 17:28:16.000000000 +0000 wwi-armistice
+-rw-r--r-- 1 baolinh csugrad 0 2017-10-25 23:45:05.875873000 +0000 now1
+-rw-r--r-- 1 baolinh csugrad 0 2017-10-25 23:45:01.664510000 +0000 now
+Thus, it is clear that the problem that we had initially occurs also on the
+SEASnet machine. This is because of overflow again.

@@ -1,0 +1,152 @@
+`Baolinh Nguyen
+TA: Farnoosh Javadi
+UID: 104732121
+CS35L Lab 6
+FILE: lab2.log
+
+I first made sure that I was in the C locale.
+I did this my using the
+locale
+command.
+Seeing that it was not set properly, I used the
+export LC_ALL='C'
+command.
+I sorted the files in /usr/share/dict/words by using the command
+sort -o words /usr/share/dict/words
+I then created a text file from the assignment's web page by using the command:
+wget http://web.cs.ucla.edu/classes/fall17/cs35L/assign/assign2.html
+After reading over the tr command by using the man tr command, I eecuted the six
+commands from the site.
+I had named the assignment file "inpu.txt" so I had to add that in as input.
+To do this, I used a modified version of all the commands:
+
+tr -c 'A-Za-z' '[\n*]' <input.txt
+This command replaces all characters that are not from A-Z or from a-z to
+a newline character.
+
+tr -cs 'A-Za-z' '[\n*]' <input.txt
+This command replaces all characters that are not from the set A-Z or a-z with a
+newline character and also removes all duplicates.
+
+tr -cs 'A-Za-z' '[\n*]' | sort <input.txt
+This command replaces all characters that are not contained within the set A-Z
+or a-z with a newline character. It also sorts each line alphabetically and
+removes duplicates.
+
+tr -cs 'A-Za-z' '[\n*]' | sort -u <input.txt
+This command replaces all characters that are not contained within the set A-Z
+or a-z with a newline character, removing duplicates. It also sorts each line
+alphabetically. In this case, it removes duplicate lines.
+
+tr -cs 'A-Za-z' '[\n*]' | sort -u | comm input.txt words
+This command replaces all characters that are not contained within the set A-Z
+or a-z with a newline character, removing duplicates. It also sorts each line
+alphabetically and removes duplicate lines. In this case, it also compares the
+words in the input file to the words in the "words" file, noting which ones are
+contained in only one of the two or in both.
+
+tr -cs 'A-Za-z' '[\n*]' | sort -u | comm -23 input.txt words
+This command replaces all characters that are not contained within the set A-Z
+or a-z with a newline character, removing duplicates. It also sorts each line
+alphabetically and removes duplicate lines. In this case it omits words that
+appear in both (due to the 3 flag) and words that appear in the "words" file
+(due to the 2 flag). It only shows words unique to the input.txt file.
+
+To write the script to create the Hawaiian dictionary, I first began by creating
+a script called "buildwords". I created the script incrementally, separating the
+dictionary creating process into several steps:
+1. Retrieve HTML
+2. Remove all English words and remove HTML
+3. Change all upper-case letters to lower-case
+4. Switch all ` to '
+5. Separate words that contain spaces and commas into two words
+6. Remove all words that contain letters not in the Hawaiian alphabet
+7. Sort words and remove duplicates
+
+After looking at the steps to create this script, I began with (1), retrieving
+the HTML from the page and renaming that file "hwords".
+
+As I did this, I would periodically save and run the script. At first, the
+execution permissions on the script were off so I fixed that using the following
+command:
+chmod u+x buildwords
+Once that was done, I was able to freely execute the script using:
+./buildwords
+
+I completed step (2) by first saving only lines that contained <td>___</td>
+using the command
+grep --regexp="<td>.*</td>"
+I then removed all leading white spaces with the command
+sed 's/^\s*//g'
+Following that, I removed all HTML tags and blank lines using the following
+commands
+sed 's/<[^>]*>//g'
+sed '/^$/d' <hwords.txt >hwords
+I finally was able to remove all English words, which I noticed appeared every
+other line, includng the first line. Therefore, I used the following command to
+remove every other line
+sed -n '1~2!p'
+
+After completing that, I did step (3) by changing all uppercase letters to
+lowercase letters using the following command
+tr [A-Z] [a-z]
+
+I then switched all ` to ' as per step (4)
+tr '`' "'"
+
+After, I separated words that contained a space and a comma or a space by itself
+into two words using the following commands
+sed 's/, /\n/g' 
+sed 's/ /\n/g'
+
+Once that was all completed, I removed all extra words that may have been left
+that do not contain the Hawaiian alphabet, as per step (6)
+sed "/[^pk'mnwlhaeiou]/d" <hwords.txt >hwords
+
+I finally then sorted all words and removed all duplicates using the following
+command
+sort -u
+
+After the process was complete, I then began to check the spelling of the
+Assignment 2 web-page using a modified version of the 
+cat foo.html bar.html | ./buildwords | less 
+command.
+
+Before beginning to check, I first had to create the dictionary, which I could
+now do with a simple 
+./buildwords
+command.
+
+I first checked the spelling on the web page with the Hawaiian spell checker
+using the following command
+cat assign2.html | tr -cs 'A-Za-z' '[\n*]' | tr '[:upper:]' '[:lower:]' | sort -u | comm -23
+- hwords
+This lists all words that are mispelled according to the Hawaiian dictionary --
+the words that are not in hwords but are on the web page.
+
+To count the number of mispelled words in English, I used the following command
+cat assign2.html | tr -cs 'A-Za-z' '[\n*]' | tr 'A-Z' 'a-z' | sort
+-u | comm -23 - words | wc -l
+There were 39 mispelled English words.
+
+To count the number of mispelled words in Hawaiian, I used the following command
+cat assign2.html | tr -cs 'A-Za-z' '[\n*]' | tr 'A-Z' 'a-z' | sort -u | comm -23
+- hwords
+There were 405 mispelled Hawaiian words
+
+To look at the mispelled words themselves, I used the following two commands to
+create and populate the files mispelledEnglish and mispelledHawaiian:
+cat assign2.html | tr -cs 'A-Za-z' '[\n*]' | tr 'A-Z' 'a-z' | sort -u | comm -23
+- words >mispelledEnglish
+cat assign2.html | tr -cs 'A-Za-z' '[\n*]' | tr 'A-Z' 'a-z' | sort -u | comm -23
+- hwords >mispelledHawaiian
+
+Then, to see which words were mispelled in English but not in Hawaiian, I used
+the following command:
+comm -23 mispelledEnglish mispelledHawaiian
+Some examples: halau, lau, and wiki
+
+To see which words were mispelled in Hawaiian but not in English, I used the
+following command:
+comm -13 mispelledEnglish mispelledHawaiian
+Some examples: work, working, worry, write, and your.

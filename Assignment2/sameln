@@ -1,0 +1,76 @@
+#!/bin/bash
+
+D=$1
+
+#set delimeter so that files with spaces are recognized
+IFS=$'\n'
+
+#sort the files so they are automatically all in alphabetical order
+#if there is a duplicate, then the earlier file will be kept
+#gather all files that are not hidden
+RESULT=$(ls $D | sort)
+
+#gather all hidden files, or files that start with .
+HIDDEN=$(ls -a $D | grep '^\.' | sort)
+
+fileCount=0
+declare -a FILES;
+
+#count up files from HIDDEN that are readable
+for HFILE in ${HIDDEN[@]}
+do
+    if [ -L "$D/$HFILE" ]
+    then
+	:
+    elif [ !  -f "$D/$HFILE" ]
+    then
+	:
+    elif [ !  -r "$D/$HFILE" ]
+    then
+	echo "cannot read $D/$HFILE"
+    else
+	FILES[$fileCount]="$D/$HFILE"
+	let fileCount=fileCount+1
+    fi
+done
+
+#count up files from RESULT that are readable
+for RFILE in ${RESULT[@]}
+do
+    if [ -L "$D/$RFILE" ]
+    then
+	:
+    elif [ !  -f "$D/$RFILE" ]
+    then
+	:
+    elif [ !  -r "$D/$RFILE" ]
+    then
+	echo "cannot read $D/$RFILE"
+    else
+	FILES[$fileCount]="$D/$RFILE"
+	let fileCount=fileCount+1
+    fi
+done
+
+#compare files one by one to check if they are the same
+for (( i=0; i<$fileCount; i++))
+do
+    for (( j=$i+1; j<$fileCount; j++))
+    do
+	flag=$(diff "${FILES[$j]}" "${FILES[$i]}")
+	if [ ! "$flag" ]
+	then
+	    rm "${FILES[$j]}"
+	    ln "${FILES[$i]}" "${FILES[$j]}"
+	else
+	    :
+	fi
+    done
+done
+
+#ASSIGNMENT 2
+#TA: Farnoosh Javadi
+#NAME: Baolinh Nguyen
+#UID: 104732121
+#CS35L Lab 6
+#FILE: sameln
